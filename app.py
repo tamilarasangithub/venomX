@@ -186,9 +186,9 @@ def chat():
     })
 
 if __name__ == "__main__":
-    # Get the port from the environment variable (Render sets this automatically)
-    # Default to 5000 if not found
-    port = int(os.environ.get("PORT", 5000))
-    
-    # host='0.0.0.0' is the CRITICAL part for Render
+    # Get the port from the environment variable (Hugging Face Spaces sets this automatically)
+    # Default to 7860 if not found
+    port = int(os.environ.get("PORT", 7860))
+
+    # host='0.0.0.0' is required for Spaces to accept external requests
     app.run(host='0.0.0.0', port=port)
