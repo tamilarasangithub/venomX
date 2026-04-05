@@ -185,5 +185,10 @@ def chat():
         'response': "I am the VenomX AI Emergency Assistant. I can help analyze your symptoms or find a nearby hospital. Please describe any symptoms you are experiencing (e.g., 'blurred vision', 'massive swelling', 'abdominal pain') or ask for a 'hospital'."
     })
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+if __name__ == "__main__":
+    # Get the port from the environment variable (Render sets this automatically)
+    # Default to 5000 if not found
+    port = int(os.environ.get("PORT", 5000))
+    
+    # host='0.0.0.0' is the CRITICAL part for Render
+    app.run(host='0.0.0.0', port=port)
