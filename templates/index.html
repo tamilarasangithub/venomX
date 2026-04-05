@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VenomX Analyzer</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v=1) }}">
+    <!-- Phosphor icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+</head>
+<body>
+    <div class="app-container">
+        <header>
+            <div class="logo">
+                <i class="ph ph-activity"></i>
+                <h1>VenomX <span>AI</span></h1>
+            </div>
+            <p class="subtitle">Instant venomous snake bite identification and emergency protocol.</p>
+        </header>
+
+        <main class="main-content">
+            <!-- Left Column: Upload -->
+            <section class="upload-section glass-panel">
+                <div class="upload-area" id="upload-area">
+                    <input type="file" id="imageInput" accept="image/*" hidden>
+                    <div class="upload-content" id="upload-content">
+                        <i class="ph ph-upload-simple"></i>
+                        <h3>Drop your image here</h3>
+                        <p>or click to browse</p>
+                    </div>
+                    <div class="preview-content hidden" id="preview-content">
+                        <img id="imagePreview" src="" alt="Preview">
+                        <button class="btn-secondary" id="reselectBtn" onclick="event.stopPropagation()">
+                            <i class="ph ph-arrows-clockwise"></i> Change Image
+                        </button>
+                    </div>
+                </div>
+                <button class="btn-primary" id="analyzeBtn" disabled>
+                    <i class="ph ph-scan"></i> Analyze Bite Image
+                </button>
+            </section>
+
+            <!-- Right Column: Results & Info -->
+            <div class="info-column">
+                <section class="result-section glass-panel hidden" id="resultCard">
+                    <div class="result-header">
+                        <h2>Analysis Result</h2>
+                        <div class="status-indicator" id="statusIndicator"></div>
+                    </div>
+                    
+                    <div class="result-details">
+                        <div class="prediction">
+                            <span class="label">Identified Snake:</span>
+                            <span class="value" id="snakeLabel">---</span>
+                        </div>
+                        <div class="confidence">
+                            <div class="conf-header">
+                                <span class="label">AI Confidence:</span>
+                                <span class="value" id="confValue">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="confFill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="alert-box" id="alertBox">
+                        <i class="ph ph-warning-circle"></i>
+                        <p id="alertMessage">Please seek immediate medical attention if you suspect a venomous bite.</p>
+                    </div>
+                </section>
+
+                <section class="dos-donts glass-panel">
+                    <h2>Emergency Protocol</h2>
+                    <div class="guidelines">
+                        <div class="guide-list dos">
+                            <h3><i class="ph ph-check-circle"></i> DOs</h3>
+                            <ul>
+                                <li><strong>Stay Calm:</strong> Keep the patient still to slow venom spread.</li>
+                                <li><strong>Remove Constrictions:</strong> Take off rings, watches, or tight clothing near the bite.</li>
+                                <li><strong>Keep Immobilized:</strong> Keep the bitten limb at or slightly below heart level.</li>
+                                <li><strong>Seek Medical Help:</strong> Get to a hospital immediately; antivenom is the only effective treatment.</li>
+                                <li><strong>Note Details:</strong> Remember snake's appearance or take a photo from a safe distance.</li>
+                            </ul>
+                        </div>
+                        <div class="guide-list donts">
+                            <h3><i class="ph ph-x-circle"></i> DON'Ts</h3>
+                            <ul>
+                                <li><strong>Do NOT Cut:</strong> Never cut the bite wound or attempt to suck out the venom.</li>
+                                <li><strong>Do NOT Tourniquet:</strong> Avoid applying tight tourniquets which can cause tissue damage.</li>
+                                <li><strong>No Ice/Heat:</strong> Do not apply ice, cold packs, or heat to the bite area.</li>
+                                <li><strong>No Alcohol/Caffeine:</strong> Do not give the victim anything to eat or drink except water.</li>
+                                <li><strong>Do NOT Chase:</strong> Do not try to catch or kill the snake.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Chatbot Widget -->
+    <div class="chatbot-widget">
+        <button class="chat-toggle" id="chatToggle" title="Open Emergency Assistant">
+            <i class="ph ph-chat-teardrop-dots"></i>
+        </button>
+        
+        <div class="chat-window hidden" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="ph ph-activity"></i>
+                    <h3>Emergency Assistant</h3>
+                </div>
+                <button class="chat-close" id="chatClose">
+                    <i class="ph ph-x"></i>
+                </button>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <p>Hello! I am the VenomX AI Emergency Assistant. I can help analyze your symptoms or find a nearby hospital. Please describe any symptoms you are experiencing or ask for a hospital.</p>
+                </div>
+            </div>
+            
+            <div class="chat-input-area">
+                <input type="text" id="chatInput" placeholder="Type your symptoms...">
+                <button id="sendMsgBtn">
+                    <i class="ph ph-paper-plane-right"></i>
+                </button>
+            </div>
+            <div class="chat-actions">
+                <button id="findHospitalBtn" class="action-btn">
+                    <i class="ph ph-map-pin"></i> Find Hospital
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="overlay hidden" id="loadingOverlay">
+        <div class="spinner"></div>
+        <p>Analyzing image structure...</p>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js', v=1) }}"></script>
+</body>
+</html>
