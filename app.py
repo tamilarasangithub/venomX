@@ -94,20 +94,14 @@ def predict():
 
     try:
         if model is not None and HAS_TF:
-            # 1. Save locally exactly like Colab upload
             temp_path = "temp_upload_image.png"
             file.save(temp_path)
 
-            # 2. Pre-process exactly as Colab does
-            img = image.load_img(temp_path, target_size=(224, 224))
-            x = image.img_to_array(img)
-            x = np.expand_dims(x, axis=0)
-            processed_img = x / 255.0  # Normalize (Important!)
-            
-            # 3. Predict exactly as Colab does
+            img = Image.open(temp_path)
+            processed_img = prepare_image(img)
+
             prediction = model.predict(processed_img)
-            
-            # Safely handle the 5 model classes based on the Drive screenshot
+
             classes = [
                 'Augmented / Other',   # Index 0
                 'Cobra',               # Index 1
@@ -115,32 +109,20 @@ def predict():
                 'Non-Venomous',        # Index 3
                 "Russell's Viper"      # Index 4
             ]
-            
+
             result_idx = int(np.argmax(prediction))
-            
             if result_idx < len(classes):
                 result = classes[result_idx]
             else:
                 result = f"Unknown Class #{result_idx}"
-            
+
             confidence = float(np.max(prediction))
-            
-            # --- U-Shape Override ---
-            if is_u_shaped_bite(temp_path):
-                print("Overriding AI prediction due to U-shape heuristic.")
-                result = 'Non-Venomous'
-                confidence = 0.999
-            # ------------------------
-            
-            # Clean up temp file
+
             if os.path.exists(temp_path):
                 os.remove(temp_path)
         else:
-            # Mock response for UI testing if model is missing
-            time.sleep(1.5) # Simulate processing time
-            result = "Russell's Viper" # Dummy result
-            confidence = 0.9234
-            
+            return jsonify({'error': 'Model not loaded or TensorFlow unavailable.'}), 500
+
         return jsonify({'prediction': result, 'confidence': confidence})
     except Exception as e:
         return jsonify({'error': str(e)}), 500
